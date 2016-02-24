@@ -27,21 +27,26 @@ class TextFile(object):
     def getWords(self):
         return [word.strip(' .,()":').lower() for word in self.content.split()]
 
-    # returns a list or dictionary
+    # returns a list of tuples
     def getWordsOccurence(self):
-        # uses set (unsorted list of unique objects) and list method count
-        return [(item,self.getWords().count(item)) for item in set(self.getWords())]
         # uses Counter from collections library
-        return Counter(self.getWords())
+        return Counter(self.getWords()).most_common()
 
 
 def printWordsOccurence(words):
-    pass
+    print "\n{0:>20} | {1:>1}".format("Word","Occurrences")
+    print " "+ "-"*40
+    for (word, count) in words:
+        print "{0:>20} | {1:>1}".format(word,count)
+
+def getWordsInCommon(file1, file2):
+    return len(set(file1.getWords()).intersection(file2.getWords()))
+
+def printWordsInCommon(file1, file2):
+    print "\nThe file {} and {} have {} words in common.\n".format(\
+    file1.name, file2.name, getWordsInCommon(file1,file2))
 
 textfile1 = TextFile("50_words_lorem_ipsum_1paragraph.txt", "samplefiles")
-
-print textfile1.getAbsolutePath()
-print textfile1.getContent()
-print textfile1.getWords()
-print textfile1.getWordsSET()
-print textfile1.getWordsOccurence()
+textfile2 = TextFile("100_words_lorem_ipsum_1paragraph.txt", "samplefiles")
+printWordsOccurence(textfile1.getWordsOccurence())
+printWordsInCommon(textfile1, textfile2)
